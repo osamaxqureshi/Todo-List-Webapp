@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-
-<body>
+<%- include('header'); -%>
     <div class="box" id="heading">
         <h1>
-            <%= kindofDay %>
+            <%= listTitle %>
         </h1>
 
     </div>
@@ -27,10 +18,8 @@
 
                 <form class item action="/" method="post">
                     <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
-                    <button type="submit">+</button>
+                    <button type="submit" name="list" value=<%=listTitle %>>+</button>
                 </form>
     </div>
 
-</body>
-
-</html>
+<%- include('footer'); -%>

@@ -3,7 +3,9 @@ const { request } = require("http");
 const app = express();
 app.use(express.urlencoded());
 const https = require("https");
-var items = ["Buy Food", "Cook Food", "Eat Food"];
+const date = require(__dirname + "/date.js");
+const items = ["Buy Food", "Cook Food", "Eat Food"];
+const workItems = [];
 
 // for random port on server
 app.use(express.static("Public"));
@@ -12,19 +14,7 @@ app.use(express.static("Public"));
 app.set('view engine', 'ejs');
 
 app.get("/", function (req, res) {
-
-	var today = new Date();
-	var currentDay = today.getDate();
-
-	var options = {
-		weekday: "long",
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	};
-
-	var day = today.toLocaleDateString("en-GB", options);
-
+	let day = date.getDate();
 	// to get Day of the week
 	// const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 	// const d = new Date();
@@ -38,13 +28,30 @@ app.get("/", function (req, res) {
 	// 	day = "Weekday";
 	// }
 
-	res.render("list", { kindofDay: day, newListItems: items })
+	res.render("list", { listTitle: day, newListItems: items })
 });
 
 app.post("/", function (req, res) {
-	var item = req.body.newItem;
-	items.push(item);
-	res.redirect("/");
+
+	if (req.body.list === "Work") {
+		var item = req.body.newItem;
+		workItems.push(item);
+		res.redirect("/work");
+	}
+	else {
+		var item = req.body.newItem;
+		items.push(item);
+		res.redirect("/");
+	}
+});
+
+app.get("/about", function (req, res) {
+	res.render("about");
+})
+
+
+app.get("/work", function (req, res) {
+	res.render("list", { listTitle: "Work", newListItems: workItems })
 })
 
 app.listen(process.env.PORT || 3000, function () {
